@@ -1,0 +1,29 @@
+class CircularBufferList:
+    def __init__(self, size):
+        self.size = size
+        self.buffer = [None] * size
+        self.head = 0
+        self.tail = 0
+        self.full = False
+
+    def push(self, value):
+        self.buffer[self.head] = value
+        if self.full:
+            self.tail = (self.tail + 1) % self.size
+        self.head = (self.head + 1) % self.size
+        self.full = self.head == self.tail
+
+    def pop(self):
+        if self.is_empty():
+            raise IndexError("Buffer is empty")
+        value = self.buffer[self.tail]
+        self.buffer[self.tail] = None
+        self.tail = (self.tail + 1) % self.size
+        self.full = False
+        return value
+
+    def is_empty(self):
+        return not self.full and self.head == self.tail
+
+    def is_full(self):
+        return self.full
